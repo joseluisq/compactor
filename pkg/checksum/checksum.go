@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-// ComputeChecksum computes a `MD5`, `SHA1`, `SHA256` or `SHA512` message digest.
+// ComputeChecksum computes a `md5`, `sha1`, `sha256` or `sha512` message digest
 func ComputeChecksum(r io.Reader, algo string) (hash string, err error) {
 	data, err := ioutil.ReadAll(r)
 	if err != nil {
@@ -35,7 +35,7 @@ func ComputeChecksum(r io.Reader, algo string) (hash string, err error) {
 	return hash, nil
 }
 
-// CreateChecksumFiles computes MD5, SHA1, SHA256 or SHA512 message digest and save it into a file.
+// CreateChecksumFiles computes `md5`, `sha1`, `sha256` or `sha512` message digest and save it into a file.
 // It returns checksum file paths or an error.
 func CreateChecksumFiles(files []string, checksumAlgos []string, checksumDst string, filesBasename bool) ([]string, error) {
 	checksums := make(map[string][]string)
@@ -74,5 +74,6 @@ func CreateChecksumFiles(files []string, checksumAlgos []string, checksumDst str
 		}
 		outfiles = append(outfiles, filename)
 	}
+
 	return outfiles, nil
 }

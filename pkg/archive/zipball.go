@@ -32,10 +32,10 @@ func CreateZipballBytes(src string, outBuf io.Writer) error {
 		h.Method = zip.Deflate
 		// Get source file content
 		f, err := os.Open(src)
+		defer f.Close()
 		if err != nil {
 			return err
 		}
-		defer f.Close()
 		if _, err := io.Copy(hw, f); err != nil {
 			return err
 		}
@@ -62,10 +62,10 @@ func CreateZipballBytes(src string, outBuf io.Writer) error {
 			// If it's not a directory, write file content instead
 			if !fi.IsDir() {
 				f, err := os.Open(file)
+				defer f.Close()
 				if err != nil {
 					return err
 				}
-				defer f.Close()
 				if _, err := io.Copy(hw, f); err != nil {
 					return err
 				}

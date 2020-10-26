@@ -1,8 +1,6 @@
-# Compactor [![Build Status](https://travis-ci.com/joseluisq/compactor.svg?branch=master)](https://travis-ci.com/joseluisq/compactor)
+# Compactor [![Build Status](https://travis-ci.com/joseluisq/compactor.svg?branch=master)](https://travis-ci.com/joseluisq/compactor) [![GoDoc](https://godoc.org/github.com/joseluisq/compactor?status.svg)](https://pkg.go.dev/github.com/joseluisq/compactor)
 
 > [Tar](https://golang.org/pkg/archive/tar/)/[Gzip](https://golang.org/pkg/compress/gzip/) and [Zip](https://golang.org/pkg/archive/zip/) archive utilities with optional [checksum](https://en.wikipedia.org/wiki/Checksum) computation.
-
-**Status:** WIP
 
 ## Usage
 
@@ -17,8 +15,8 @@ import (
 
 func main() {
 	compactor.CreateTarballWithChecksum(
-		// 1. archive input directory or file
-		"./my-dir-or-file",
+		// 1. archive input file or directory
+		"./my-file-or-dir",
 		// 2. archive output file
 		"~/my-archive.tar.gz",
 		// 3. checksum algorithm
@@ -27,15 +25,39 @@ func main() {
 		"~/my-archive.CHECKSUM.txt",
 	)
 
-    // output files:
-    //	~/my-archive.tar.gz
-    //	~/my-archive.sha256.txt
+	// output files:
+	//	~/my-archive.tar.gz
+	//	~/my-archive.sha256.tar.txt
 }
 ```
 
 ### Zip
 
-TODO
+
+```go
+package main
+
+import (
+	"github.com/joseluisq/compactor"
+)
+
+func main() {
+	compactor.CreateZipballWithChecksum(
+		// 1. archive input file or directory
+		"./my-file-or-dir",
+		// 2. archive output file
+		"~/my-archive.zip",
+		// 3. checksum algorithm
+		"sha256",
+		// 4. checksum output file
+		"~/my-archive.CHECKSUM.zip.txt",
+	)
+
+	// output files:
+	//	~/my-archive.zip
+	//	~/my-archive.sha256.zip.txt
+}
+```
 
 ## Contributions
 

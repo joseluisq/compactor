@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/joseluisq/compactor"
-)
+import "github.com/joseluisq/compactor"
 
 func main() {
 	compactor.CreateTarballWithChecksum(
