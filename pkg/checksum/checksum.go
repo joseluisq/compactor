@@ -42,6 +42,7 @@ func CreateChecksumFiles(files []string, checksumAlgos []string, checksumDst str
 	for _, algo := range checksumAlgos {
 		for _, f := range files {
 			r, err := os.Open(f)
+			defer r.Close()
 			if err != nil {
 				return nil, fmt.Errorf("failed to read %s file: %w", f, err)
 			}
@@ -57,6 +58,7 @@ func CreateChecksumFiles(files []string, checksumAlgos []string, checksumDst str
 	for algo, values := range checksums {
 		filename := strings.Replace(checksumDst, "CHECKSUM", algo, -1)
 		f, err := os.Create(filename)
+		defer f.Close()
 		if err != nil {
 			return nil, err
 		}

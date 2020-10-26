@@ -31,6 +31,7 @@ func CreateTarballBytes(src string, outBuf io.Writer) error {
 		}
 		// Get source file content
 		f, err := os.Open(src)
+		defer f.Close()
 		if err != nil {
 			return err
 		}
@@ -58,6 +59,7 @@ func CreateTarballBytes(src string, outBuf io.Writer) error {
 			// If it's not a directory, write file content instead
 			if !fi.IsDir() {
 				f, err := os.Open(file)
+				defer f.Close()
 				if err != nil {
 					return err
 				}

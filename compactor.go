@@ -12,29 +12,72 @@ import (
 	"github.com/joseluisq/compactor/pkg/checksum"
 )
 
+// ArchiveFormat represents the archive output format.
+type ArchiveFormat uint8
+
 const (
-	tarGzExt = "tar.gz"
+	// ArchiveFormatTar represents the Tar/Gzip output format.
+	ArchiveFormatTar ArchiveFormat = iota
+	// ArchiveFormatZip represents the Zip output format.
+	ArchiveFormatZip
 )
 
-// CreateTarball archives and compresses a file or folder (src) using Tar/Gzip to dst (tarball).
-func CreateTarball(src string, dst string) error {
+func createArchiveFile(src string, dst string, format ArchiveFormat) error {
+	var ext string
+	switch format {
+	case ArchiveFormatTar:
+		ext = "tar.gz"
+		break
+	case ArchiveFormatZip:
+		ext = "zip"
+		break
+	default:
+		return fmt.Errorf("archive `%d` format is not supported", format)
+	}
+
 	dst = strings.TrimSpace(dst)
 	if dst == "" {
 		_, src := filepath.Split(src)
-		dst = src + "." + tarGzExt
+		dst = src + "." + ext
 	}
-	if !strings.HasSuffix(dst, "."+tarGzExt) {
-		dst = dst + "." + tarGzExt
+	if !strings.HasSuffix(dst, "."+ext) {
+		dst = dst + "." + ext
 	}
+
 	err := os.MkdirAll(filepath.Dir(dst), 0755)
 	if err != nil {
-		return fmt.Errorf("can't make provided parent directories: %s", err)
+		return fmt.Errorf("can't create provided parent directories: %s", err)
 	}
+
 	var buf bytes.Buffer
-	if err := archive.CreateTarballBytes(src, &buf); err != nil {
-		return err
+	if format == ArchiveFormatZip {
+		if err := archive.CreateZipballBytes(src, &buf); err != nil {
+			return err
+		}
+	}
+	if format == ArchiveFormatTar {
+		if err := archive.CreateTarballBytes(src, &buf); err != nil {
+			return err
+		}
 	}
 	if err := ioutil.WriteFile(dst, buf.Bytes(), 0755); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// CreateTarball archives and compresses a file or folder (src) using Tar/Gzip to dst (tarball).
+func CreateTarball(src string, dst string) error {
+	if err := createArchiveFile(src, dst, ArchiveFormatTar); err != nil {
+		return err
+	}
+	return nil
+}
+
+// CreateZipball archives and compresses a file or folder (src) using Zip to dst (zipball).
+func CreateZipball(src string, dst string) error {
+	if err := createArchiveFile(src, dst, ArchiveFormatZip); err != nil {
 		return err
 	}
 	return nil
@@ -43,6 +86,23 @@ func CreateTarball(src string, dst string) error {
 // CreateTarballWithChecksum archives and compresses a file or folder (src) using Tar/Gzip to dst (tarball) with checksum. It returns the checksum file path or an error.
 func CreateTarballWithChecksum(src string, dst string, checksumAlgo string, checksumDst string) (string, error) {
 	if err := CreateTarball(src, dst); err != nil {
+		return "", err
+	}
+	files, err := checksum.CreateChecksumFiles(
+		[]string{dst},
+		[]string{checksumAlgo},
+		checksumDst,
+		true,
+	)
+	if err != nil {
+		return "", fmt.Errorf("can't create checksum(s): %s", err)
+	}
+	return files[0], nil
+}
+
+// CreateZipballWithChecksum archives and compresses a file or folder (src) using Zip to dst (Zipball) with checksum. It returns the checksum file path or an error.
+func CreateZipballWithChecksum(src string, dst string, checksumAlgo string, checksumDst string) (string, error) {
+	if err := CreateZipball(src, dst); err != nil {
 		return "", err
 	}
 	files, err := checksum.CreateChecksumFiles(
