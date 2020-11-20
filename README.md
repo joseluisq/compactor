@@ -1,6 +1,8 @@
-# Compactor [![Build Status](https://travis-ci.com/joseluisq/compactor.svg?branch=master)](https://travis-ci.com/joseluisq/compactor) [![GoDoc](https://godoc.org/github.com/joseluisq/compactor?status.svg)](https://pkg.go.dev/github.com/joseluisq/compactor)
+# Compactor [![Build Status](https://travis-ci.com/joseluisq/compactor.svg?branch=master)](https://travis-ci.com/joseluisq/compactor) [![codecov](https://codecov.io/gh/joseluisq/compactor/branch/master/graph/badge.svg)](https://codecov.io/gh/joseluisq/compactor) [![Go Report Card](https://goreportcard.com/badge/github.com/joseluisq/compactor)](https://goreportcard.com/report/github.com/joseluisq/compactor) [![GoDoc](https://godoc.org/github.com/joseluisq/compactor?status.svg)](https://pkg.go.dev/github.com/joseluisq/compactor)
 
 > [Tar](https://golang.org/pkg/archive/tar/)/[Gzip](https://golang.org/pkg/compress/gzip/) and [Zip](https://golang.org/pkg/archive/zip/) archive utilities with optional [checksum](https://en.wikipedia.org/wiki/Checksum) computation.
+
+__Status:__ WIP
 
 ## Usage
 

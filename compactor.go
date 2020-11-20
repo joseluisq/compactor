@@ -71,18 +71,12 @@ func createArchiveFile(src string, dst string, format ArchiveFormat) error {
 
 // CreateTarball archives and compresses a file or folder (src) using Tar/Gzip to dst (tarball).
 func CreateTarball(src string, dst string) error {
-	if err := createArchiveFile(src, dst, ArchiveFormatTar); err != nil {
-		return err
-	}
-	return nil
+	return createArchiveFile(src, dst, ArchiveFormatTar)
 }
 
 // CreateZipball archives and compresses a file or folder (src) using Zip to dst (zipball).
 func CreateZipball(src string, dst string) error {
-	if err := createArchiveFile(src, dst, ArchiveFormatZip); err != nil {
-		return err
-	}
-	return nil
+	return createArchiveFile(src, dst, ArchiveFormatZip)
 }
 
 // CreateTarballWithChecksum archives and compresses a file or folder (src) using Tar/Gzip to dst (tarball) with checksum (`md5`, `sha1`, `sha256` or `sha512`). It returns the checksum file path or an error.
