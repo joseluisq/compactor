@@ -6,3 +6,5 @@ vendor
 *.log
 *.bin
 *.sum
+
+!**/fixtures/**/*

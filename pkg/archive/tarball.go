@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-// CreateTarballBytes archives a file or directory (src path) using Tar and Gzip compression.
+// CreateTarballBytes archives a file or directory src using Tar and Gzip compression.
 func CreateTarballBytes(src string, outBuf io.Writer) error {
 	zw := gzip.NewWriter(outBuf)
 	tw := tar.NewWriter(zw)
@@ -40,7 +40,7 @@ func CreateTarballBytes(src string, outBuf io.Writer) error {
 		}
 		break
 	case fi.IsDir():
-		// Traversing the directory tree on a file system
+		// Traversing the directory tree on file system
 		filepath.Walk(src, func(file string, fi os.FileInfo, err error) error {
 			// Create a Tar file header
 			h, err := tar.FileInfoHeader(fi, file)
