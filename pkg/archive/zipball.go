@@ -28,7 +28,6 @@ func CreateZipballBytes(src string, outBuf io.Writer) error {
 		if err != nil {
 			return err
 		}
-		h.Name = filepath.ToSlash(src)
 		h.Method = zip.Deflate
 		// Get source file content
 		f, err := os.Open(src)
