@@ -34,7 +34,7 @@ func createArchiveFile(src string, dst string, format ArchiveFormat) error {
 		ext = "zip"
 		break
 	default:
-		return fmt.Errorf("archive `%d` format is not supported", format)
+		return fmt.Errorf("archive format provided is not supported")
 	}
 
 	dst = strings.TrimSpace(dst)
@@ -62,11 +62,7 @@ func createArchiveFile(src string, dst string, format ArchiveFormat) error {
 			return err
 		}
 	}
-	if err := ioutil.WriteFile(dst, buf.Bytes(), 0755); err != nil {
-		return err
-	}
-
-	return nil
+	return ioutil.WriteFile(dst, buf.Bytes(), 0755)
 }
 
 // CreateTarball archives and compresses a file or folder (src) using Tar/Gzip to dst (tarball).

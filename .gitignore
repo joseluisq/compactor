@@ -6,5 +6,8 @@ vendor
 *.log
 *.bin
 *.sum
+*.zip
+*.tar
+*.gz
 
 !**/fixtures/**/*
