@@ -1,5 +1,4 @@
-// Package Compactor provides Tar/Gzip and Zip archive utilities with optional checksum computation.
-
+// Package compactor provides Tar/Gzip and Zip archive utilities with optional checksum computation.
 package compactor
 
 import (

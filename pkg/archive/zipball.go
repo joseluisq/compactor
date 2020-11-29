@@ -38,7 +38,6 @@ func CreateZipballBytes(src string, outBuf io.Writer) error {
 		if _, err := io.Copy(hw, f); err != nil {
 			return err
 		}
-		break
 	case fi.IsDir():
 		// Traversing the directory tree on a file system
 		filepath.Walk(src, func(file string, fi os.FileInfo, err error) error {
@@ -71,7 +70,6 @@ func CreateZipballBytes(src string, outBuf io.Writer) error {
 			}
 			return nil
 		})
-		break
 	default:
 		return fmt.Errorf("archive/zip: unknown file mode %v", fm)
 	}

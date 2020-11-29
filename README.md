@@ -2,8 +2,6 @@
 
 > [Tar](https://golang.org/pkg/archive/tar/)/[Gzip](https://golang.org/pkg/compress/gzip/) and [Zip](https://golang.org/pkg/archive/zip/) archive utilities with optional [checksum](https://en.wikipedia.org/wiki/Checksum) computation.
 
-__Status:__ WIP
-
 ## Usage
 
 ### Tar/Gzip
@@ -60,6 +58,8 @@ func main() {
 	//	~/my-archive.sha256.zip.txt
 }
 ```
+
+For more API functionalities take a look at https://pkg.go.dev/github.com/joseluisq/compactor
 
 ## Contributions
 

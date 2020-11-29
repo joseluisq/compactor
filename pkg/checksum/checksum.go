@@ -1,3 +1,4 @@
+// Package checksum provides checksum computation for files using md5, sha1, sha256 and sha512 algorithms.
 package checksum
 
 import (
@@ -13,7 +14,7 @@ import (
 	"strings"
 )
 
-// ComputeChecksum computes a `md5`, `sha1`, `sha256` or `sha512` message digest
+// ComputeChecksum computes a `md5`, `sha1`, `sha256` or `sha512` message digest.
 func ComputeChecksum(r io.Reader, algo string) (hash string, err error) {
 	data, err := ioutil.ReadAll(r)
 	if err != nil {
@@ -53,7 +54,6 @@ func CreateChecksumFiles(files []string, checksumAlgos []string, checksumDst str
 			checksums[algo] = append(checksums[algo], sum, f)
 		}
 	}
-
 	var outfiles []string
 	for algo, values := range checksums {
 		filename := strings.Replace(checksumDst, "CHECKSUM", algo, -1)
@@ -74,6 +74,5 @@ func CreateChecksumFiles(files []string, checksumAlgos []string, checksumDst str
 		}
 		outfiles = append(outfiles, filename)
 	}
-
 	return outfiles, nil
 }

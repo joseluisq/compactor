@@ -1,3 +1,4 @@
+// Package archive provides archiving and files compressing using Tar-GZ or Zip formmat.
 package archive
 
 import (
@@ -38,9 +39,8 @@ func CreateTarballBytes(src string, outBuf io.Writer) error {
 		if _, err := io.Copy(tw, f); err != nil {
 			return err
 		}
-		break
 	case fi.IsDir():
-		// Traversing the directory tree on file system
+		// Traversing the directory tree on a file system
 		filepath.Walk(src, func(file string, fi os.FileInfo, err error) error {
 			// Create a Tar file header
 			h, err := tar.FileInfoHeader(fi, file)
@@ -69,7 +69,6 @@ func CreateTarballBytes(src string, outBuf io.Writer) error {
 			}
 			return nil
 		})
-		break
 	default:
 		return fmt.Errorf("archive/tar: unknown file mode %v", fm)
 	}
