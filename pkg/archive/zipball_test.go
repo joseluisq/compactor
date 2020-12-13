@@ -10,7 +10,8 @@ import (
 
 func TestCreateZipballBytes(t *testing.T) {
 	type args struct {
-		src string
+		basePath string
+		src      string
 	}
 	tests := []struct {
 		name    string
@@ -43,7 +44,7 @@ func TestCreateZipballBytes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			outBuf := &bytes.Buffer{}
-			err := CreateZipballBytes(tt.args.src, outBuf)
+			err := CreateZipballBytes(tt.args.basePath, tt.args.src, outBuf)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateZipballBytes() error = %v, wantErr %v", err, tt.wantErr)
 				return

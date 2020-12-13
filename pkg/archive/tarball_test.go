@@ -10,7 +10,8 @@ import (
 
 func TestCreateTarballBytes(t *testing.T) {
 	type args struct {
-		src string
+		basePath string
+		src      string
 	}
 	tests := []struct {
 		name    string
@@ -43,7 +44,7 @@ func TestCreateTarballBytes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			outBuf := &bytes.Buffer{}
-			err := CreateTarballBytes(tt.args.src, outBuf)
+			err := CreateTarballBytes(tt.args.basePath, tt.args.src, outBuf)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateTarballBytes() error = %v, wantErr %v", err, tt.wantErr)
 				return

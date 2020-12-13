@@ -8,9 +8,10 @@ import (
 
 func Test_createArchiveFile(t *testing.T) {
 	type args struct {
-		src    string
-		dst    string
-		format ArchiveFormat
+		basePath string
+		src      string
+		dst      string
+		format   ArchiveFormat
 	}
 	tests := []struct {
 		name    string
@@ -60,7 +61,7 @@ func Test_createArchiveFile(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := createArchiveFile(tt.args.src, tt.args.dst, tt.args.format); (err != nil) != tt.wantErr {
+			if err := createArchiveFile(tt.args.basePath, tt.args.src, tt.args.dst, tt.args.format); (err != nil) != tt.wantErr {
 				t.Errorf("createArchiveFile() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -69,8 +70,9 @@ func Test_createArchiveFile(t *testing.T) {
 
 func TestCreateTarball(t *testing.T) {
 	type args struct {
-		src string
-		dst string
+		basePath string
+		src      string
+		dst      string
 	}
 	tests := []struct {
 		name    string
@@ -95,7 +97,7 @@ func TestCreateTarball(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := CreateTarball(tt.args.src, tt.args.dst); (err != nil) != tt.wantErr {
+			if err := CreateTarball(tt.args.basePath, tt.args.src, tt.args.dst); (err != nil) != tt.wantErr {
 				t.Errorf("CreateTarball() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -104,8 +106,9 @@ func TestCreateTarball(t *testing.T) {
 
 func TestCreateZipball(t *testing.T) {
 	type args struct {
-		src string
-		dst string
+		basePath string
+		src      string
+		dst      string
 	}
 	tests := []struct {
 		name    string
@@ -130,7 +133,7 @@ func TestCreateZipball(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := CreateZipball(tt.args.src, tt.args.dst); (err != nil) != tt.wantErr {
+			if err := CreateZipball(tt.args.basePath, tt.args.src, tt.args.dst); (err != nil) != tt.wantErr {
 				t.Errorf("CreateZipball() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -139,6 +142,7 @@ func TestCreateZipball(t *testing.T) {
 
 func TestCreateTarballWithChecksum(t *testing.T) {
 	type args struct {
+		basePath     string
 		src          string
 		dst          string
 		checksumAlgo string
@@ -183,7 +187,7 @@ func TestCreateTarballWithChecksum(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CreateTarballWithChecksum(tt.args.src, tt.args.dst, tt.args.checksumAlgo, tt.args.checksumDst)
+			got, err := CreateTarballWithChecksum(tt.args.basePath, tt.args.src, tt.args.dst, tt.args.checksumAlgo, tt.args.checksumDst)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateTarballWithChecksum() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -197,6 +201,7 @@ func TestCreateTarballWithChecksum(t *testing.T) {
 
 func TestCreateZipballWithChecksum(t *testing.T) {
 	type args struct {
+		basePath     string
 		src          string
 		dst          string
 		checksumAlgo string
@@ -241,7 +246,7 @@ func TestCreateZipballWithChecksum(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CreateZipballWithChecksum(tt.args.src, tt.args.dst, tt.args.checksumAlgo, tt.args.checksumDst)
+			got, err := CreateZipballWithChecksum(tt.args.basePath, tt.args.src, tt.args.dst, tt.args.checksumAlgo, tt.args.checksumDst)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateZipballWithChecksum() error = %v, wantErr %v", err, tt.wantErr)
 				return

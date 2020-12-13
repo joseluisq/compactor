@@ -15,13 +15,15 @@ import (
 
 func main() {
 	compactor.CreateTarballWithChecksum(
-		// 1. archive input file or directory
+		// 1. a base input path directory (it will be skipped for each archive header)
+		"./my-base-dir",
+		// 2. archive input file or directory
 		"./my-file-or-dir",
-		// 2. archive output file
+		// 3. archive output file
 		"~/my-archive.tar.gz",
-		// 3. checksum algorithm
+		// 4. checksum algorithm
 		"sha256",
-		// 4. checksum output file
+		// 5. checksum output file
 		"~/my-archive.CHECKSUM.txt",
 	)
 
@@ -43,13 +45,15 @@ import (
 
 func main() {
 	compactor.CreateZipballWithChecksum(
-		// 1. archive input file or directory
+		// 1. a base input path directory (it will be skipped for each archive header)
+		"./my-base-dir",
+		// 2. archive input file or directory
 		"./my-file-or-dir",
-		// 2. archive output file
+		// 3. archive output file
 		"~/my-archive.zip",
-		// 3. checksum algorithm
+		// 4. checksum algorithm
 		"sha256",
-		// 4. checksum output file
+		// 5. checksum output file
 		"~/my-archive.CHECKSUM.zip.txt",
 	)
 

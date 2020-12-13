@@ -91,7 +91,7 @@ func TestCreateChecksumFiles(t *testing.T) {
 			args: args{
 				files:         []string{"../../LICENSE-x", "../../LICENSE-y"},
 				checksumAlgos: []string{"md5", "sha1"},
-				checksumDst:   "/tmp/LICENSE.CHECKSUM.txt",
+				checksumDst:   "/tmp/LICENSE.CHECKSUM1.txt",
 				filesBasename: true,
 			},
 			wantErr: true,
@@ -101,7 +101,7 @@ func TestCreateChecksumFiles(t *testing.T) {
 			args: args{
 				files:         []string{"../../LICENSE-MIT", "../../LICENSE-APACHE"},
 				checksumAlgos: []string{"md55", "sha11"},
-				checksumDst:   "/tmp/LICENSE.CHECKSUM.txt",
+				checksumDst:   "/tmp/LICENSE.CHECKSUM2.txt",
 				filesBasename: true,
 			},
 			wantErr: true,
@@ -111,10 +111,10 @@ func TestCreateChecksumFiles(t *testing.T) {
 			args: args{
 				files:         []string{"../../LICENSE-MIT", "../../LICENSE-APACHE"},
 				checksumAlgos: []string{"md5", "sha1"},
-				checksumDst:   "/tmp/LICENSE.CHECKSUM.txt",
+				checksumDst:   "/tmp/LICENSE.CHECKSUM-OK.txt",
 				filesBasename: true,
 			},
-			want: []string{"/tmp/LICENSE.md5.txt", "/tmp/LICENSE.sha1.txt"},
+			want: []string{"/tmp/LICENSE.md5-OK.txt", "/tmp/LICENSE.sha1-OK.txt"},
 		},
 	}
 	for _, tt := range tests {

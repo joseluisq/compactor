@@ -6,11 +6,23 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // CreateZipballBytes archives a file or directory (src path) using Zip.
-func CreateZipballBytes(src string, outBuf io.Writer) error {
+// basePath param specify the base path directory of src path which will be skipped for each archive file header.
+// Otherwise if basePath param is empty then only src path will taken into account.
+func CreateZipballBytes(basePath string, src string, outBuf io.Writer) error {
 	zw := zip.NewWriter(outBuf)
+	src = strings.TrimSpace(src)
+	basePath = strings.TrimSpace(basePath)
+	if basePath != "" {
+		p, err := filepath.Abs(filepath.Join(basePath, src))
+		if err != nil {
+			return err
+		}
+		src = p
+	}
 	fi, err := os.Stat(src)
 	if err != nil {
 		return err
@@ -39,6 +51,13 @@ func CreateZipballBytes(src string, outBuf io.Writer) error {
 			return err
 		}
 	case fi.IsDir():
+		basePathAbs := ""
+		if basePath != "" {
+			basePathAbs, err = filepath.Abs(basePath)
+			if err != nil {
+				return err
+			}
+		}
 		// Traversing the directory tree on a file system
 		filepath.Walk(src, func(file string, fi os.FileInfo, err error) error {
 			// Create a Zip file header
@@ -46,7 +65,19 @@ func CreateZipballBytes(src string, outBuf io.Writer) error {
 			if err != nil {
 				return err
 			}
-			h.Name = filepath.ToSlash(file)
+			// Base path file support
+			fileName := file
+			if basePathAbs != "" {
+				p := strings.TrimSpace(strings.ReplaceAll(file, basePathAbs, ""))
+				if p == "" {
+					return nil
+				}
+				if strings.HasPrefix(p, "/") {
+					p = p[1:]
+				}
+				fileName = p
+			}
+			h.Name = filepath.ToSlash(fileName)
 			if fi.IsDir() {
 				h.Name += "/"
 			} else {

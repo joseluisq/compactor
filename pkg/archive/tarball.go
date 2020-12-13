@@ -8,12 +8,24 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // CreateTarballBytes archives a file or directory src using Tar and Gzip compression.
-func CreateTarballBytes(src string, outBuf io.Writer) error {
+// basePath param specify the base path directory of src path which will be skipped for each archive file header.
+// Otherwise if basePath param is empty then only src path will taken into account.
+func CreateTarballBytes(basePath string, src string, outBuf io.Writer) error {
 	zw := gzip.NewWriter(outBuf)
 	tw := tar.NewWriter(zw)
+	src = strings.TrimSpace(src)
+	basePath = strings.TrimSpace(basePath)
+	if basePath != "" {
+		p, err := filepath.Abs(filepath.Join(basePath, src))
+		if err != nil {
+			return err
+		}
+		src = p
+	}
 	fi, err := os.Stat(src)
 	if err != nil {
 		return err
@@ -40,6 +52,13 @@ func CreateTarballBytes(src string, outBuf io.Writer) error {
 			return err
 		}
 	case fi.IsDir():
+		basePathAbs := ""
+		if basePath != "" {
+			basePathAbs, err = filepath.Abs(basePath)
+			if err != nil {
+				return err
+			}
+		}
 		// Traversing the directory tree on a file system
 		filepath.Walk(src, func(file string, fi os.FileInfo, err error) error {
 			// Create a Tar file header
@@ -47,11 +66,23 @@ func CreateTarballBytes(src string, outBuf io.Writer) error {
 			if err != nil {
 				return err
 			}
+			// Base path file support
+			fileName := file
+			if basePathAbs != "" {
+				p := strings.TrimSpace(strings.ReplaceAll(file, basePathAbs, ""))
+				if p == "" {
+					return nil
+				}
+				if strings.HasPrefix(p, "/") {
+					p = p[1:]
+				}
+				fileName = p
+			}
 			// Since os.FileInfo's Name method only returns the base name of
 			// the file it describes, it may be necessary to modify Header.Name
 			// to provide the full path name of the file.
 			// https://golang.org/src/archive/tar/common.go?#L626
-			h.Name = filepath.ToSlash(file)
+			h.Name = filepath.ToSlash(fileName)
 			// Write Tar header
 			if err := tw.WriteHeader(h); err != nil {
 				return err

@@ -23,7 +23,7 @@ const (
 	ArchiveFormatZip
 )
 
-func createArchiveFile(src string, dst string, format ArchiveFormat) error {
+func createArchiveFile(basePath string, src string, dst string, format ArchiveFormat) error {
 	var ext string
 	switch format {
 	case ArchiveFormatTar:
@@ -52,12 +52,12 @@ func createArchiveFile(src string, dst string, format ArchiveFormat) error {
 
 	var buf bytes.Buffer
 	if format == ArchiveFormatZip {
-		if err := archive.CreateZipballBytes(src, &buf); err != nil {
+		if err := archive.CreateZipballBytes(basePath, src, &buf); err != nil {
 			return err
 		}
 	}
 	if format == ArchiveFormatTar {
-		if err := archive.CreateTarballBytes(src, &buf); err != nil {
+		if err := archive.CreateTarballBytes(basePath, src, &buf); err != nil {
 			return err
 		}
 	}
@@ -65,18 +65,24 @@ func createArchiveFile(src string, dst string, format ArchiveFormat) error {
 }
 
 // CreateTarball archives and compresses a file or folder (src) using Tar/Gzip to dst (tarball).
-func CreateTarball(src string, dst string) error {
-	return createArchiveFile(src, dst, ArchiveFormatTar)
+// basePath param specify the base path directory of src path which will be skipped for each archive file header.
+// Otherwise if basePath param is empty then only src path will taken into account.
+func CreateTarball(basePath string, src string, dst string) error {
+	return createArchiveFile(basePath, src, dst, ArchiveFormatTar)
 }
 
 // CreateZipball archives and compresses a file or folder (src) using Zip to dst (zipball).
-func CreateZipball(src string, dst string) error {
-	return createArchiveFile(src, dst, ArchiveFormatZip)
+// basePath param specify the base path directory of src path which will be skipped for each archive file header.
+// Otherwise if basePath param is empty then only src path will taken into account.
+func CreateZipball(basePath string, src string, dst string) error {
+	return createArchiveFile(basePath, src, dst, ArchiveFormatZip)
 }
 
 // CreateTarballWithChecksum archives and compresses a file or folder (src) using Tar/Gzip to dst (tarball) with checksum (`md5`, `sha1`, `sha256` or `sha512`). It returns the checksum file path or an error.
-func CreateTarballWithChecksum(src string, dst string, checksumAlgo string, checksumDst string) (string, error) {
-	if err := CreateTarball(src, dst); err != nil {
+// basePath param specify the base path directory of src path which will be skipped for each archive file header.
+// Otherwise if basePath param is empty then only src path will taken into account.
+func CreateTarballWithChecksum(basePath string, src string, dst string, checksumAlgo string, checksumDst string) (string, error) {
+	if err := CreateTarball(basePath, src, dst); err != nil {
 		return "", err
 	}
 	files, err := checksum.CreateChecksumFiles(
@@ -92,8 +98,10 @@ func CreateTarballWithChecksum(src string, dst string, checksumAlgo string, chec
 }
 
 // CreateZipballWithChecksum archives and compresses a file or folder (src) using Zip to dst (Zipball) with checksum (`md5`, `sha1`, `sha256` or `sha512`). It returns the checksum file path or an error.
-func CreateZipballWithChecksum(src string, dst string, checksumAlgo string, checksumDst string) (string, error) {
-	if err := CreateZipball(src, dst); err != nil {
+// basePath param specify the base path directory of src path which will be skipped for each archive file header.
+// Otherwise if basePath param is empty then only src path will taken into account.
+func CreateZipballWithChecksum(basePath, src string, dst string, checksumAlgo string, checksumDst string) (string, error) {
+	if err := CreateZipball(basePath, src, dst); err != nil {
 		return "", err
 	}
 	files, err := checksum.CreateChecksumFiles(
